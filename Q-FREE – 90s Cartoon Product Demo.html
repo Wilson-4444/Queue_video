@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="utf-8"><title>Q-FREE Demo (Cartoon, 90s)</title>
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@500;800&display=swap" rel="stylesheet">
+<style>
+:root{--n:#0B1F4B;--o:#FF9933;--g:#138808;--b:#2F6BFF}
+*{box-sizing:border-box}
+html,body{height:100%;margin:0;background:#07122e;font-family:'Baloo 2','Comic Sans MS','Segoe UI',sans-serif;overflow:hidden}
+#wrap{position:absolute;inset:0;padding-top:env(safe-area-inset-top,0px)}
+#st{position:absolute;left:0;top:0;width:1920px;height:1080px;transform-origin:0 0;background:#fff;overflow:hidden}
+.s{position:absolute;inset:0;opacity:0;transition:opacity .7s;pointer-events:none}.s.act{opacity:1}
+[data-s]{opacity:0;transition:opacity .45s,transform .6s}[data-s].on{opacity:1}
+.mv{opacity:1!important}
+.ph{position:absolute;width:420px;height:840px;border:12px solid var(--n);border-radius:58px;background:#fff;overflow:hidden;box-shadow:12px 14px 0 rgba(11,31,75,.25)}
+.pn{position:absolute;inset:0;padding:36px 26px;display:flex;flex-direction:column;gap:16px;align-items:center;justify-content:center;text-align:center;font-size:30px;color:var(--n);font-weight:800}
+.chip{border:4px solid var(--n);border-radius:40px;padding:6px 18px;font-size:26px;background:#fff;transition:.3s}
+.chip.sel{background:var(--o);transform:scale(1.08)}
+.row{display:flex;flex-wrap:wrap;gap:10px;justify-content:center}
+.btn{background:var(--g);color:#fff;border:4px solid var(--n);border-radius:24px;padding:8px 30px;font-size:30px}
+.cap{position:absolute;left:0;right:0;text-align:center;font-size:76px;font-weight:800;color:var(--n);text-shadow:4px 4px 0 var(--o)}
+.side{position:absolute;font-size:70px;font-weight:800;color:var(--n);line-height:1.05;width:760px}
+.lap{position:absolute;border:12px solid var(--n);border-radius:26px 26px 0 0;background:#fff;overflow:hidden}
+.lapb{position:absolute;height:34px;background:var(--n);border-radius:0 0 40px 40px}
+.cam{position:relative;background:#cfd8ea;border:5px solid var(--n);border-radius:14px;overflow:hidden}
+.cam b{position:absolute;bottom:0;width:30px;height:62%;background:#6b7aa3;border-radius:50% 50% 0 0;filter:blur(2.5px)}
+.live{position:absolute;top:5px;left:8px;font-size:18px;color:#d00}
+.bx{position:absolute;border:6px solid #14c814;border-radius:10px;font-size:28px;color:#0a6a0a;text-align:center;line-height:1}
+.pp{position:absolute;animation:bob 1.2s ease-in-out infinite}
+@keyframes bob{50%{transform:translateY(-8px)}}
+.card{position:absolute;left:30px;width:640px;height:110px;border:6px solid var(--n);border-radius:20px;background:#fff;font-size:36px;font-weight:800;padding:12px 24px;color:var(--n);transition:transform 1s cubic-bezier(.5,0,.2,1)}
+.tag{background:var(--o);color:#fff;border-radius:14px;padding:0 14px;font-size:28px;margin-left:12px}
+.c1.on{transform:translateY(240px)}.c2.on,.c3.on{transform:translateY(-120px)}
+.pop{position:absolute;left:18px;right:18px;top:110px;background:var(--b);color:#fff;border:5px solid var(--n);border-radius:28px;padding:20px;font-size:32px;font-weight:800;text-align:center}
+.sp{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-size:150px;font-weight:800;color:var(--n)}
+.bub{border:5px solid var(--n);border-radius:24px;padding:10px 18px;font-size:26px;margin:8px 0;text-align:left;width:100%}
+#bar{position:absolute;left:0;right:0;bottom:0;height:56px;display:flex;gap:10px;align-items:center;padding:0 14px;background:#07122e;color:#fff;font:600 16px system-ui}
+#bar button{background:var(--o);border:0;border-radius:8px;padding:6px 14px;font-weight:700;cursor:pointer}
+#pr{flex:1;height:8px;background:#26365f;border-radius:8px}#pf{height:100%;width:0;background:var(--g);border-radius:8px}
+#start{position:absolute;inset:0;background:rgba(7,18,46,.92);display:flex;flex-direction:column;gap:18px;align-items:center;justify-content:center;color:#fff;z-index:9;text-align:center;font:600 18px system-ui;padding:20px}
+#start button{font:800 28px 'Baloo 2',sans-serif;background:var(--o);border:0;border-radius:40px;padding:12px 44px;cursor:pointer}
+</style></head><body>
+<div id="wrap"><div id="st"></div>
+<div id="bar"><button id="pp">Pause</button><button id="rs">Restart</button><button id="mu">Mute</button><div id="pr"><div id="pf"></div></div><span id="tm">0:00 / 1:30</span></div>
+<div id="start"><div id="lg"></div><div>Cartoon product demo · 90 seconds · turn sound on for voiceover and music</div><button id="go">▶ Play demo</button></div></div>
+<script>
+const $=(q,r=document)=>r.querySelector(q),$$=(q,r=document)=>[...r.querySelectorAll(q)];
+const S=[[0,10],[10,22],[22,40],[40,52],[52,62],[62,72],[72,80],[80,90]];
+const VO=["Hours in line for a few minutes at the counter. Q-FREE fixes that.","Verify your identity once with Aadhaar and a quick face check.","Pick the office and services, see the live queue and wait time, and book your token before you leave home.","At the office, an AI camera counts the people actually waiting, in real time.","Watch your place in line update live as you travel.","When the person ahead is called, you get an alert and an email.","If someone doesn't show up, they move to the end, and the queue keeps flowing.","With an AI assistant, form translation into Kannada and read-aloud built in. Q-FREE. Skip the wait, not the line."];
+const logo=w=>`<svg width="${w}" viewBox="0 0 420 135"><circle cx="65" cy="62" r="50" fill="none" stroke="#0B1F4B" stroke-width="14"/><path d="M88 96l28 26" stroke="#FF9933" stroke-width="14" stroke-linecap="round"/>${[[42,'#FF9933'],[65,'#138808'],[88,'#2F6BFF']].map(([x,c])=>`<circle cx="${x}" cy="48" r="7" fill="#0B1F4B"/><rect x="${x-9}" y="58" width="18" height="24" rx="9" fill="${c}"/>`).join('')}<text x="128" y="96" font-size="86" font-weight="800" fill="#0B1F4B" font-family="Baloo 2,sans-serif">-FREE</text></svg>`;
+const back=(c,h='#2b2b2b')=>`<svg width="70" height="150" viewBox="0 0 60 120"><rect x="14" y="88" width="13" height="30" rx="6" fill="#0B1F4B"/><rect x="33" y="88" width="13" height="30" rx="6" fill="#0B1F4B"/><rect x="6" y="42" width="48" height="56" rx="20" fill="${c}" stroke="#0B1F4B" stroke-width="4"/><circle cx="30" cy="25" r="19" fill="${h}" stroke="#0B1F4B" stroke-width="4"/></svg>`;
+const front=(c)=>`<svg width="110" height="220" viewBox="0 0 60 120"><rect x="14" y="88" width="13" height="30" rx="6" fill="#0B1F4B"/><rect x="33" y="88" width="13" height="30" rx="6" fill="#0B1F4B"/><rect x="6" y="42" width="48" height="56" rx="20" fill="${c}" stroke="#0B1F4B" stroke-width="4"/><circle cx="30" cy="25" r="19" fill="#f2b98a" stroke="#0B1F4B" stroke-width="4"/><path d="M11 22q19-22 38 0q-19-8-38 0" fill="#2b2b2b"/><circle cx="24" cy="27" r="2.5" fill="#0B1F4B"/><circle cx="36" cy="27" r="2.5" fill="#0B1F4B"/><path d="M23 34q7 7 14 0" fill="none" stroke="#0B1F4B" stroke-width="2.5"/></svg>`;
+const cols=['#FF9933','#138808','#2F6BFF','#e85d75','#8a5cf6','#0B1F4B','#FF9933'];
+const ph=(x,y,i)=>`<div class="ph" style="left:${x}px;top:${y}px">${i}</div>`;
+const pn=(s,e,h)=>`<div class="pn" data-s="${s}" ${e?`data-e="${e}"`:''}>${h}</div>`;
+const cam=(w,h,n=3)=>`<div class="cam" style="width:${w}px;height:${h}px"><span class="live">● LIVE</span>${Array.from({length:n},(_,i)=>`<b style="left:${24+i*(w-80)/Math.max(n-1,1)}px"></b>`).join('')}</div>`;
+const lap=(x,y,w,h,i)=>`<div class="lap" style="left:${x}px;top:${y}px;width:${w}px;height:${h}px">${i}</div><div class="lapb" style="left:${x-40}px;top:${y+h}px;width:${w+80}px"></div>`;
+const ground='<div style="position:absolute;left:0;right:0;bottom:0;height:260px;background:#cfe8c8;border-top:8px solid #0B1F4B"></div>';
+const sc=[];
+// 1
+sc.push(`<div style="position:absolute;inset:0;background:#EAF2FF"></div>${ground}
+<div style="position:absolute;left:120px;top:150px;width:520px;height:560px;background:#f4e3c1;border:8px solid #0B1F4B;border-radius:20px"><div style="margin:30px;background:#0B1F4B;color:#fff;font-size:44px;text-align:center;border-radius:14px;font-weight:800;line-height:1.1;padding:8px">GOVT. OFFICE<br>RTO · AADHAAR</div><div style="margin:40px auto;width:140px;height:260px;background:#7b5a3a;border:6px solid #0B1F4B;border-radius:70px 70px 0 0"></div></div>
+${[0,1,2,3,4,5,6].map(i=>`<div class="pp" style="left:${680+i*150}px;top:600px;animation-delay:${i*.15}s">${back(cols[i])}</div>`).join('')}
+<div class="pp" style="left:1000px;top:480px;font-size:70px">⌚</div><div class="pp" style="left:1420px;top:470px;font-size:70px">😩</div>
+<div class="cap" style="top:40px" data-s="1" data-e="6">Hours in line…</div><div class="cap" style="top:40px" data-s="6">Q-FREE fixes that.</div><div style="position:absolute;left:1280px;top:150px" data-s="6">${logo(500)}</div>`);
+// 2
+sc.push(`<div style="position:absolute;inset:0;background:#fff"></div>${ground}${ph(250,110,
+pn(0,2.5,`<div style="font-size:48px">${logo(300)}</div><div class="btn">Sign in</div>`)+
+pn(2.5,5,`Upload Aadhaar<br>Offline eKYC<div class="chip">📄 ekyc.zip</div><div style="width:260px;height:20px;border:4px solid var(--n);border-radius:12px"><div style="height:100%;width:100%;background:var(--g);border-radius:8px;animation:w 2s linear"></div></div><style>@keyframes w{from{width:0}}</style>`)+
+pn(5,9,`Face check<div style="width:230px;height:300px;border:8px dashed var(--g);border-radius:50%;display:flex;align-items:center;justify-content:center"><div style="font-size:120px;animation:turn 2s ease-in-out infinite">🙂</div></div><style>@keyframes turn{25%{transform:translateX(-30px) rotate(-14deg)}75%{transform:translateX(30px) rotate(14deg)}}</style><span style="font-size:26px">Turn left… now right</span>`)+
+pn(9,0,`<div style="font-size:150px;color:var(--g)">✔</div>Verified<div style="font-size:24px">Approved by officer</div>`))}
+<div class="side" style="left:820px;top:220px" data-s="0" data-e="2.5">1. Sign in</div><div class="side" style="left:820px;top:220px" data-s="2.5" data-e="5">2. Upload Aadhaar eKYC</div><div class="side" style="left:820px;top:220px" data-s="5" data-e="9">3. Quick face check</div><div class="side" style="left:820px;top:220px;color:#138808" data-s="9">Verified once. ✔</div>
+<div class="pp" style="left:1500px;top:560px">${front('#2F6BFF')}</div>`);
+// 3
+const ch=(t,s)=>`<div class="chip" ${s?`data-sel="${s}"`:''}>${t}</div>`;
+sc.push(`<div style="position:absolute;inset:0;background:#fff"></div>${ground}${ph(250,110,
+pn(0,3,`Step 1<div class="row">${ch('General',1.5)}${ch('Senior Citizen')}</div>`)+
+pn(3,8,`Step 2<div class="row">${ch('Aadhaar Seva Kendra')}${ch('Passport Seva Kendra')}${ch('RTO',4)}${ch('Taluk office')}${ch('Municipal office')}</div><div class="row">${ch('Driving test',5.2)}${ch('RC transfer',6.4)}</div>`)+
+pn(8,13,`Step 3 · Nearby RTOs<div style="font-size:70px;line-height:1">📍 &nbsp;📍<br>&nbsp;📍</div>`)+
+`<div class="pn" data-s="10" data-e="13" style="background:#fff;top:300px;border-top:6px solid var(--n);border-radius:30px 30px 0 0;font-size:28px">Queue now: <span style="color:var(--o)">6</span> people<br>Est. wait: 18 min${cam(300,110,3)}</div>`+
+pn(13,15.5,`<div class="btn" data-sel="13.2">Confirm</div><div class="chip" data-s="14.2">I'll arrive in 15 minutes</div>`)+
+pn(15.5,0,`Your token<div style="font-size:110px;color:var(--o)">Q-566</div><div style="font-size:60px">🎟️</div>`))}
+<div class="side" style="left:820px;top:200px" data-s="0" data-e="8">Pick your office<br>&amp; services</div><div class="side" style="left:820px;top:200px" data-s="8" data-e="13">See the live queue<br>&amp; wait time</div><div class="side" style="left:820px;top:200px;color:#138808" data-s="13">Book from home.<br>Token: Q-566</div>`);
+// 4
+const names=[561,562,563,564,565];
+sc.push(`<div style="position:absolute;inset:0;background:#EAF2FF"></div>${ground}
+${lap(460,90,1000,640,`<div class="cam" style="position:absolute;inset:0;border:0;border-radius:0;background:#d9e1f2"><span class="live" style="font-size:28px">● LIVE · AI CAMERA</span>${names.map((n,i)=>`<div class="pp" style="left:${80+i*170}px;top:${300+(i%2)*30}px;animation-delay:${i*.2}s;filter:blur(1.5px)">${back(cols[i],'#3a3a3a')}</div><div class="bx" style="left:${70+i*170}px;top:${250+(i%2)*30}px;width:100px;height:210px;padding-top:0" data-s="${1+i*1.4}"><span style="position:relative;top:-34px;background:#14c814;color:#fff;padding:0 6px;border-radius:6px">Q-${n}</span></div>`).join('')}<div style="position:absolute;right:30px;top:30px;background:var(--n);color:#fff;font-size:44px;font-weight:800;border-radius:16px;padding:6px 24px;min-width:420px;height:70px">People in line: ${[1,2,3,4,5].map(n=>`<span style="position:absolute;right:40px" data-s="${1+(n-1)*1.4}" ${n<5?`data-e="${1+n*1.4}"`:''}>${n}</span>`).join('')}</div></div>`)}
+<div class="cap" style="bottom:20px;font-size:62px">AI counts only people actually waiting</div>`);
+// 5
+sc.push(`<div style="position:absolute;inset:0;background:#fff"></div><div style="position:absolute;left:0;right:0;bottom:0;height:260px;background:#9aa6bf;border-top:8px solid #0B1F4B"></div>${ph(250,110,
+`<div class="pn" style="justify-content:flex-start;padding-top:50px">Live Token<div style="font-size:110px;color:var(--o);line-height:1">Q-566</div><div style="position:relative;height:60px;width:200px;font-size:34px">${[[2,0,3],[1,3,6],[0,6,0]].map(([n,s,e])=>`<span style="position:absolute;left:0;right:0" data-s="${s}" ${e?`data-e="${e}"`:''}>${n} ${n==1?'person':'people'} ahead</span>`).join('')}</div><div style="position:relative;height:40px;width:300px;font-size:30px;color:var(--g)">${[['about 12 minutes',0,3],['about 6 minutes',3,6],['Almost there!',6,0]].map(([t,s,e])=>`<span style="position:absolute;left:0;right:0" data-s="${s}" ${e?`data-e="${e}"`:''}>${t}</span>`).join('')}</div>${cam(330,150,2)}</div>`)}
+<div class="side" style="left:820px;top:200px">Your place in line,<br>live.</div><div class="mv" style="position:absolute;left:820px;bottom:200px;font-size:140px;animation:ride 10s linear forwards">🛵💨</div><style>@keyframes ride{from{transform:translateX(0)}to{transform:translateX(780px)}}</style>`);
+// 6
+sc.push(`<div style="position:absolute;inset:0;background:#EAF2FF"></div>${ground}
+${lap(80,150,760,500,`<div style="padding:20px;font-size:34px;color:var(--n);font-weight:800">Staff · Counter 2<div class="card" style="top:90px;left:20px;width:700px">Q-565<span class="tag" style="background:#999">Waiting</span><span class="tag" data-s="2" style="position:absolute;right:14px;top:24px;background:var(--g)">In Progress</span></div><div class="btn" style="margin-top:250px;display:inline-block;transition:.3s" data-sel="1.8">Click: In Progress</div><div style="position:absolute;left:560px;top:400px;font-size:70px;transition:1.2s;transform:translate(120px,60px)" data-sel="0.2">👆</div></div>`)}
+${ph(1000,110,`<div class="pn" style="justify-content:flex-start;padding-top:60px"><div style="font-size:70px">🔔</div><div style="font-size:50px;color:var(--o)">Q-566</div></div><div class="pop" data-s="3" data-snd="1">You're next!<br>Please head to the counter.</div><div class="pop" style="top:430px;background:#fff;color:var(--n)" data-s="5.6">✉️ <div style="transform:scale(.55);margin:-24px -80px -30px">${logo(420)}</div>You're next! Please head to the counter.</div>`)}
+<div class="side" style="left:80px;top:700px;font-size:64px;width:900px" data-s="3.2">Alert + email, instantly.</div>`);
+// 7
+sc.push(`<div style="position:absolute;inset:0;background:#EAF2FF"></div>${ground}
+${lap(430,90,1060,640,`<div style="padding:20px 30px;font-size:34px;color:var(--n);font-weight:800;position:relative">Queue list<div style="position:relative;height:500px;margin-top:10px">
+<div class="card c1 mv" style="left:60px;top:0;width:900px;z-index:2" data-s="4">Q-567 &nbsp;Ravi<span style="float:right;color:#d00">⏱ 00:0<span style="position:relative"><span data-s="0" data-e="1" style="position:absolute">3</span><span data-s="1" data-e="2" style="position:absolute">2</span><span data-s="2" data-e="3" style="position:absolute">1</span><span data-s="3" style="position:absolute">0</span></span>&nbsp;&nbsp;</span><span class="tag" data-s="4.8" style="position:absolute;right:30px;top:60px;background:var(--o)">Didn't arrive</span></div>
+<div class="card c2 mv" style="left:60px;top:130px;width:900px" data-s="4">Q-568 &nbsp;Meena</div><div class="card c3 mv" style="left:60px;top:260px;width:900px" data-s="4">Q-569 &nbsp;Arun</div></div></div>`)}
+<div class="cap" style="bottom:20px;font-size:62px" data-s="4.5">Fair queue. Keeps flowing.</div>`);
+// 8
+const split=(i,t)=>`<div style="flex:1;border:6px solid var(--n);border-radius:22px;padding:20px;background:#fff;font-size:34px;font-weight:800;color:var(--n);text-align:center">${t}${i}</div>`;
+sc.push(`<div style="position:absolute;inset:0;background:#EAF2FF"></div>
+<div data-s="0" data-e="5" style="position:absolute;inset:80px 60px;display:flex;gap:30px">
+${split(`<div class="bub" style="margin-top:20px">Which documents for my passport?</div><div class="bub" style="background:var(--o);color:#fff">Here is your checklist for the Passport Seva Kendra.</div>`,'🤖 AI Assistant')}
+${split(`<div style="font-size:26px;margin:16px 0;background:#f3f3f3;padding:14px;border:4px dashed var(--n)">Name<br>Address</div><div style="font-size:70px">⬇️📷</div><div style="font-size:34px;background:var(--g);color:#fff;padding:14px;border-radius:14px">ಹೆಸರು<br>ವಿಳಾಸ</div>`,'📷 Form → Kannada')}
+${split(`<div style="font-size:150px;margin-top:40px">🔊</div><div class="btn" style="display:inline-block;margin-top:20px">Read aloud</div>`,'Read aloud')}</div>
+${ground}<div class="lap" style="left:1200px;top:300px;width:420px;height:280px;border-radius:20px"></div>
+<div data-s="5" data-e="7.6" style="position:absolute;inset:0"><div style="position:absolute;left:1560px;top:520px;transform:scale(.9)">${front('#0B1F4B')}</div><div style="position:absolute;left:100px;top:650px;font-size:50px;font-weight:800;color:var(--n)">Served ✔ &nbsp;😊</div><div class="mv" style="position:absolute;left:100px;top:600px;animation:walk 2.4s ease-in-out forwards">${front('#FF9933')}</div></div><style>@keyframes walk{to{transform:translateX(1280px)}}</style>
+<div data-s="7.6" style="position:absolute;inset:0;background:#0B1F4B;display:flex;flex-direction:column;gap:30px;align-items:center;justify-content:center"><div style="background:#fff;border-radius:40px;padding:30px 60px">${logo(760)}</div><div style="color:#fff;font-size:84px;font-weight:800">Skip the wait. <span style="color:#FF9933">Not the line.</span></div><div style="display:flex"><i style="width:160px;height:10px;background:#FF9933"></i><i style="width:160px;height:10px;background:#fff"></i><i style="width:160px;height:10px;background:#138808"></i></div></div>`);
+$('#st').innerHTML=sc.map(h=>`<div class="s">${h}</div>`).join('');$('#lg').innerHTML=`<div style="background:#fff;border-radius:30px;padding:16px 40px">${logo(520)}</div>`;
+// engine
+let t=0,play=false,last=0,cur=-1,mute=false,AC,vc;
+const fit=()=>{const k=Math.min(innerWidth/1920,(innerHeight-56)/1080);$('#st').style.transform=`scale(${k})`;$('#st').style.left=(innerWidth-1920*k)/2+'px'};addEventListener('resize',fit);fit();
+const chime=()=>{if(mute||!AC)return;[880,1175].forEach((f,i)=>{const o=AC.createOscillator(),g=AC.createGain();o.frequency.value=f;g.gain.setValueAtTime(.15,AC.currentTime+i*.18);g.gain.exponentialRampToValueAtTime(.001,AC.currentTime+i*.18+.5);o.connect(g).connect(AC.destination);o.start(AC.currentTime+i*.18);o.stop(AC.currentTime+i*.18+.6)})};
+let mt;const music=()=>{clearInterval(mt);if(!AC)return;const n=[261.6,329.6,392,523.3,392,329.6,293.7,349.2];let k=0;mt=setInterval(()=>{if(mute||!play)return;const o=AC.createOscillator(),g=AC.createGain();o.type='sine';o.frequency.value=n[k++%8];g.gain.setValueAtTime(.05,AC.currentTime);g.gain.exponentialRampToValueAtTime(.001,AC.currentTime+.9);o.connect(g).connect(AC.destination);o.start();o.stop(AC.currentTime+1)},500)};
+const speak=i=>{try{speechSynthesis.cancel();if(mute)return;const u=new SpeechSynthesisUtterance(VO[i]);const v=speechSynthesis.getVoices();u.voice=v.find(x=>x.lang==='en-IN')||v.find(x=>/en-(GB|AU)/.test(x.lang))||null;u.lang='en-IN';u.rate=1;speechSynthesis.speak(u)}catch(e){}};
+function render(){let i=S.findIndex(([a,b])=>t>=a&&t<b);if(i<0)i=7;const el=$$('.s')[i];
+if(i!==cur){cur=i;$$('.s').forEach((e,k)=>e.classList.toggle('act',k===i));$$('.on,.sel').forEach(e=>e.classList.remove('on','sel'));if(play)speak(i)}
+const L=t-S[i][0];
+$$('[data-s]',el).forEach(e=>{const s=+e.dataset.s,en=e.dataset.e?+e.dataset.e:1e9,on=L>=s&&L<en;if(on&&!e.classList.contains('on')&&e.dataset.snd)chime();e.classList.toggle('on',on)});
+$$('[data-sel]',el).forEach(e=>e.classList.toggle('sel',L>=+e.dataset.sel));
+$('#pf').style.width=t/90*100+'%';const m=Math.floor(t);$('#tm').textContent=`0:${String(Math.min(m,90)).padStart(2,'0')} / 1:30`.replace('0:90','1:30')}
+function tick(ts){if(play){t+=(ts-last)/1000;if(t>=90){t=89.99;play=false;$('#pp').textContent='Replay';try{speechSynthesis.cancel()}catch(e){}}}last=ts;render();requestAnimationFrame(tick)}
+$('#go').onclick=()=>{$('#start').remove();AC=new (window.AudioContext||window.webkitAudioContext)();music();play=true;cur=-1;requestAnimationFrame(x=>{last=x;tick(x)})};
+$('#pp').onclick=()=>{if(t>=89.9){t=0;cur=-1}play=!play;$('#pp').textContent=play?'Pause':'Play';try{play?speechSynthesis.resume():speechSynthesis.pause()}catch(e){}};
+$('#rs').onclick=()=>{t=0;cur=-1;play=true;$('#pp').textContent='Pause'};
+$('#mu').onclick=()=>{mute=!mute;$('#mu').textContent=mute?'Unmute':'Mute';if(mute)try{speechSynthesis.cancel()}catch(e){}else speak(cur)};
+render();
+</script></body></html>
